@@ -1,0 +1,10 @@
+# Runtime
+fastapi
+pydantic
+sqlalchemy
+asyncpg
+uvicorn[standard]
+
+# Dev (lint/type/format)
+ruff
+mypy
