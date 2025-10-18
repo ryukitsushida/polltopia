@@ -1,16 +1,13 @@
 name: Python CI
 
 on:
-  push:
-    branches:
-      - main
-      - develop
-      - "feature/**"
   pull_request:
     branches:
       - main
       - develop
-      - "feature/**"
+      - feature/**
+      - fix/**
+      - docs/**
 
 jobs:
   lint-type-check:
@@ -26,8 +23,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-          cache: "pip"
-          cache-dependency-path: backend/requirements.txt
 
       - name: Install dependencies
         run: |
