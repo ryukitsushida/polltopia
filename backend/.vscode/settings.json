@@ -3,12 +3,5 @@
   "editor.defaultFormatter": "charliermarsh.ruff",
 
   "ruff.enable": true,
-  "ruff.organizeImports": true,
-
-  "python.linting.enabled": true,
-  "python.linting.mypyEnabled": true,
-  "python.linting.mypyArgs": [
-    "--config-file",
-    "${workspaceFolder}/pyproject.toml"
-  ]
+  "ruff.organizeImports": true
 }
