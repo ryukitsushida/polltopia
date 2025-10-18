@@ -1,10 +1,10 @@
 # Runtime
-fastapi
-pydantic
-sqlalchemy
-asyncpg
-uvicorn[standard]
+fastapi~=0.115.0
+pydantic~=2.9.0
+sqlalchemy~=2.0
+asyncpg~=0.29.0
+uvicorn[standard]~=0.30.0
 
 # Dev (lint/type/format)
-ruff
-mypy
+ruff~=0.6.0
+mypy~=1.11.0
