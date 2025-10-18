@@ -1,13 +1,16 @@
 name: Python CI
 
 on:
+  push:
+    branches:
+      - main
+      - develop
+      - "feature/**"
   pull_request:
     branches:
       - main
       - develop
-      - feature/**
-      - fix/**
-      - docs/**
+      - "feature/**"
 
 jobs:
   lint-type-check:
