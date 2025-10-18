@@ -27,7 +27,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Ruff - lint
-        run: ruff check .
+        run: ruff check --no-fix .
 
       - name: Ruff - format check
         run: ruff format --check .

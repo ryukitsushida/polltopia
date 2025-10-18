@@ -2,8 +2,7 @@
 target-version = "py313"
 line-length = 120
 indent-width = 4
-fix = true
-unsafe-fixes = true
+fix = false
 
 
 [tool.ruff.format]
