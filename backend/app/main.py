@@ -15,14 +15,15 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     if "ENV" not in os.environ:
         raise ValueError("ENV environment variable is not set.")
 
-    if os.environ["ENV"] != "dev":
-        return
-    await database_config.create_tables()
-    await seed_data(database_config)
+    is_dev = os.environ["ENV"] == "dev"
+    if is_dev:
+        await database_config.create_tables()
+        await seed_data(database_config)
     try:
         yield
     finally:
-        await database_config.drop_tables()
+        if is_dev:
+            await database_config.drop_tables()
 
 
 app = FastAPI(title="PollTopia API", debug=True, lifespan=lifespan)
