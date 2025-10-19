@@ -15,10 +15,7 @@ class DatabaseConfig:
 
     async def get_db_session(self) -> AsyncGenerator[AsyncSession, None]:
         async with self.AsyncSessionLocal() as session:
-            try:
-                yield session
-            finally:
-                await session.close()
+            yield session
 
     async def create_tables(self) -> None:
         async with self.engine.begin() as conn:

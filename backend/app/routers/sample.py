@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -24,7 +26,11 @@ def get_sample_service_() -> SampleService:
 router = APIRouter(tags=["samples"])
 
 
-@router.get("/samples")
+@router.get(
+    "/samples",
+    response_model=list[SampleResponse],
+    status_code=HTTPStatus.OK.value,
+)
 async def get_samples(
     service: SampleService = Depends(get_sample_service_),
     session: AsyncSession = Depends(database_config.get_db_session),
@@ -32,8 +38,14 @@ async def get_samples(
     return await service.find_all(session)
 
 
-@router.post("/samples", response_model=CreateSampleResponse)
+@router.post(
+    "/samples",
+    response_model=CreateSampleResponse,
+    status_code=HTTPStatus.CREATED.value,
+)
 async def create_sample(
     request: CreateSampleRequest,
+    service: SampleService = Depends(get_sample_service_),
+    session: AsyncSession = Depends(database_config.get_db_session),
 ) -> CreateSampleResponse:
-    return CreateSampleResponse(id=1, name=request.name, description=request.description)
+    return await service.create(session, request)

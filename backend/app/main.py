@@ -1,3 +1,4 @@
+import os
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
@@ -11,6 +12,11 @@ from app.routers import sample
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    if "ENV" not in os.environ:
+        raise ValueError("ENV environment variable is not set.")
+
+    if os.environ["ENV"] != "dev":
+        return
     await database_config.create_tables()
     await seed_data(database_config)
     try:
