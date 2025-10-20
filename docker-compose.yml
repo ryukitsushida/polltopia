@@ -9,7 +9,8 @@ services:
       db:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/polltopia
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/polltopia
+      ENV: dev
     volumes:
       - ./backend:/app
   db:
