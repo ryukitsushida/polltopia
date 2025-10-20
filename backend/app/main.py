@@ -26,7 +26,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
             await database_config.drop_tables()
 
 
-app = FastAPI(title="PollTopia API", debug=True, lifespan=lifespan)
+app = FastAPI(title="Polltopia API", lifespan=lifespan)
 app.include_router(sample.router, prefix="/api/v1")
 
 
@@ -36,4 +36,4 @@ async def health_check() -> dict[str, str]:
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)

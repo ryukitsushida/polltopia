@@ -10,7 +10,7 @@ Base = declarative_base()
 class DatabaseConfig:
     def __init__(self) -> None:
         self.database_url = os.getenv("DATABASE_URL", "postgresql+asyncpg://postgres:postgres@db:5432/polltopia")
-        self.engine = create_async_engine(self.database_url, echo=True)
+        self.engine = create_async_engine(self.database_url)
         self.AsyncSessionLocal = async_sessionmaker(bind=self.engine, expire_on_commit=False)
 
     async def get_db_session(self) -> AsyncGenerator[AsyncSession, None]:
