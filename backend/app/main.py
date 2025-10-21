@@ -3,11 +3,13 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import APIRouter, FastAPI, Request
+from fastapi.responses import JSONResponse
 
+from app.common.exceptions import EmailConflictException
 from app.db.config import database_config
 from app.db.seed_data import seed_data
-from app.routers import sample
+from app.routers import sample, user
 
 
 @asynccontextmanager
@@ -27,12 +29,21 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 
 app = FastAPI(title="Polltopia API", lifespan=lifespan)
-app.include_router(sample.router, prefix="/api/v1")
+
+app_router = APIRouter()
+app_router.include_router(sample.router)
+app_router.include_router(user.router)
+app.include_router(app_router, prefix="/api/v1")
 
 
 @app.get("/health", tags=["health"])
 async def health_check() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.exception_handler(EmailConflictException)
+async def handle_email_conflict(_: Request, exc: EmailConflictException) -> JSONResponse:
+    return JSONResponse(status_code=409, content={"detail": str(exc)})
 
 
 if __name__ == "__main__":
