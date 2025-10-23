@@ -7,7 +7,7 @@ from uuid import UUID, uuid4
 from sqlalchemy import TEXT, DateTime, Enum, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.config import Base
+from app.core.database import Base
 from app.models.enums import Provider
 
 if TYPE_CHECKING:

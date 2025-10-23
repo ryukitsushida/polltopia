@@ -7,18 +7,14 @@ import uvicorn
 from fastapi import APIRouter, FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from app.db.config import database_config
-from app.db.seed_data import seed_data
+from app.core.database import database_config
+from app.core.seed_data import seed_data
 from app.exceptions.base import (
     AppConflictException,
     AppException,
 )
-from app.models import (  # noqa: F401
-    AccountModel,
-    SampleModel,
-    UserModel,
-)
 from app.routers import (
+    auth,
     sample,
     user,
 )
@@ -45,6 +41,7 @@ app = FastAPI(title="Polltopia API", lifespan=lifespan)
 app_router = APIRouter()
 app_router.include_router(sample.router)
 app_router.include_router(user.router)
+app_router.include_router(auth.router)
 app.include_router(app_router, prefix="/api/v1")
 
 

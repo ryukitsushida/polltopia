@@ -27,29 +27,17 @@ def get_service() -> UserService:
     return service
 
 
-router = APIRouter(tags=["users"])
-
-
-# @router.get(
-#     "/samples",
-#     response_model=list[SampleResponse],
-#     status_code=HTTPStatus.OK.value,
-# )
-# async def get_samples(
-#     service: Annotated[SampleService, Depends(get_sample_service_)],
-#     session: Annotated[AsyncSession, Depends(database_config.get_db_session)],
-# ) -> list[SampleResponse]:
-#     return await service.find_all(session)
+router = APIRouter(tags=["auth"])
 
 
 @router.post(
-    "/users",
+    "/auth/login",
     response_model=CreateUserResponse,
     status_code=HTTPStatus.CREATED.value,
 )
-async def create_user(
+async def login(
     request: CreateUserRequest,
     service: Annotated[UserService, Depends(get_service)],
     session: Annotated[AsyncSession, Depends(database_config.get_db_session)],
 ) -> CreateUserResponse:
-    return await service.create(session, request)
+    pass

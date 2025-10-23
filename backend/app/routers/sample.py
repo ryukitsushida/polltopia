@@ -4,8 +4,8 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.config import database_config
-from app.repositories.sample import (
+from app.core.database import database_config
+from app.crud.sample import (
     SampleRepository,
 )
 from app.schemas.sample.request import (

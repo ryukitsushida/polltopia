@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.repositories.sample import SampleRepository
+from app.crud.sample import SampleRepository
 from app.schemas.sample.request import (
     CreateSampleRequest,
 )

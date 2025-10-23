@@ -8,7 +8,7 @@ from pydantic import EmailStr
 from sqlalchemy import DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.config import Base
+from app.core.database import Base
 
 if TYPE_CHECKING:
     from app.models.account import AccountModel

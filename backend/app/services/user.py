@@ -1,13 +1,13 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.common.constants import DEFAULT_USER_ICON_URL
+from app.core.constants import DEFAULT_USER_ICON_URL
+from app.core.utils.security import get_password_hash
+from app.crud.account import AccountRepository
+from app.crud.user import UserRepository
 from app.exceptions.exceptions import EmailConflictException
 from app.models.enums import Provider
-from app.repositories.account import AccountRepository
-from app.repositories.user import UserRepository
 from app.schemas.user.request import CreateUserRequest
 from app.schemas.user.response import CreateUserResponse
-from app.utils.security import get_password_hash
 
 
 class UserService:
