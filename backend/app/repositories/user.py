@@ -19,8 +19,8 @@ class UserRepository:
         session: AsyncSession,
         email: EmailStr,
     ) -> UserModel:
-        async with session.begin():
-            user = UserModel(email=email)
-            session.add(user)
-        await session.refresh(user)
+        user = UserModel(email=email)
+        session.add(user)
+        # Ensure PK is available before dependent inserts in the same transaction
+        await session.flush()
         return user

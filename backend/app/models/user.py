@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from datetime import datetime
 from typing import TYPE_CHECKING
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from pydantic import EmailStr
 from sqlalchemy import DateTime, String
@@ -15,7 +17,7 @@ if TYPE_CHECKING:
 class UserModel(Base):
     __tablename__ = "user"
 
-    id: Mapped[UUID] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     email: Mapped[EmailStr] = mapped_column(String(255), nullable=False, unique=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default="now()")
     updated_at: Mapped[datetime] = mapped_column(

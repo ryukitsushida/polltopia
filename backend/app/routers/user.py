@@ -5,21 +5,25 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.config import database_config
-from app.repositories.sample import (
-    SampleRepository,
+from app.repositories.account import (
+    AccountRepository,
 )
-from app.schemas.sample.request import (
-    CreateSampleRequest,
+from app.repositories.user import (
+    UserRepository,
 )
-from app.schemas.sample.response import (
-    CreateSampleResponse,
+from app.schemas.user.request import (
+    CreateUserRequest,
 )
-from app.services.sample import SampleService
+from app.schemas.user.response import (
+    CreateUserResponse,
+)
+from app.services.user import UserService
 
 
-def get_sample_service_() -> SampleService:
-    repo = SampleRepository()
-    service = SampleService(repo)
+def get_service() -> UserService:
+    user_repository = UserRepository()
+    account_repository = AccountRepository()
+    service = UserService(user_repository=user_repository, account_repository=account_repository)
     return service
 
 
@@ -40,12 +44,12 @@ router = APIRouter(tags=["users"])
 
 @router.post(
     "/users",
-    response_model=CreateSampleResponse,
+    response_model=CreateUserResponse,
     status_code=HTTPStatus.CREATED.value,
 )
-async def create_sample(
-    request: CreateSampleRequest,
-    service: Annotated[SampleService, Depends(get_sample_service_)],
+async def create_user(
+    request: CreateUserRequest,
+    service: Annotated[UserService, Depends(get_service)],
     session: Annotated[AsyncSession, Depends(database_config.get_db_session)],
-) -> CreateSampleResponse:
+) -> CreateUserResponse:
     return await service.create(session, request)

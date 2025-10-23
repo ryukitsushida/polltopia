@@ -1,19 +1,31 @@
 import os
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+from http import HTTPStatus
 
 import uvicorn
 from fastapi import APIRouter, FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from app.common.exceptions import EmailConflictException
 from app.db.config import database_config
 from app.db.seed_data import seed_data
-from app.routers import sample, user
+from app.exceptions.base import (
+    AppConflictException,
+    AppException,
+)
+from app.models import (  # noqa: F401
+    AccountModel,
+    SampleModel,
+    UserModel,
+)
+from app.routers import (
+    sample,
+    user,
+)
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     if "ENV" not in os.environ:
         raise ValueError("ENV environment variable is not set.")
 
@@ -41,9 +53,18 @@ async def health_check() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.exception_handler(EmailConflictException)
-async def handle_email_conflict(_: Request, exc: EmailConflictException) -> JSONResponse:
-    return JSONResponse(status_code=409, content={"detail": str(exc)})
+@app.exception_handler(AppException)
+async def app_exception_handler(_: Request, exc: AppException) -> JSONResponse:
+    if isinstance(exc, AppConflictException):
+        return JSONResponse(
+            status_code=HTTPStatus.CONFLICT,
+            content={"detail": exc.message},
+        )
+    else:
+        return JSONResponse(
+            status_code=HTTPStatus.INTERNAL_SERVER_ERROR,
+            content={"detail": exc.message},
+        )
 
 
 if __name__ == "__main__":
