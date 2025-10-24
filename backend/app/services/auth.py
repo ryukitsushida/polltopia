@@ -23,4 +23,4 @@ class AuthService:
 
         subject = str(account.user_id)
         token = create_access_token(subject)
-        return LoginResponse(access_token=token)
+        return LoginResponse(access_token=token, token_type="bearer")
