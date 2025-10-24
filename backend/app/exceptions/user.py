@@ -1,4 +1,6 @@
-from app.exceptions.base import AppConflictException
+from app.exceptions.base import (
+    AppConflictException,
+)
 
 
 class EmailConflictException(AppConflictException):

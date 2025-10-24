@@ -1,18 +1,29 @@
 from uuid import UUID
 
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.account import AccountModel
-from app.models.enums import ProviderType
+from app.models.enums import Provider
+from app.models.user import UserModel
 
 
 class AccountRepository:
+    async def find_local_by_email(self, session: AsyncSession, email: str) -> AccountModel | None:
+        stmt = (
+            select(AccountModel)
+            .join(AccountModel.user)
+            .where(UserModel.email == email, AccountModel.provider == Provider.LOCAL)
+        )
+        result = await session.execute(stmt)
+        return result.scalars().first()
+
     async def create(
         self,
         session: AsyncSession,
         user_id: UUID,
         name: str,
-        provider: ProviderType,
+        provider: Provider,
         provider_id: str | None = None,
         hashed_password: str | None = None,
         image_url: str | None = None,

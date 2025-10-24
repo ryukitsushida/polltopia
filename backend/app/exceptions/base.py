@@ -6,5 +6,11 @@ class AppException(Exception):
         super().__init__(message)
 
 
+# 401
+class AppUnauthorizedException(AppException):
+    pass
+
+
+# 409
 class AppConflictException(AppException):
     pass

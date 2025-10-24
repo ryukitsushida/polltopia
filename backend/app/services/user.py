@@ -4,7 +4,7 @@ from app.core.constants import DEFAULT_USER_ICON_URL
 from app.core.utils.security import get_password_hash
 from app.crud.account import AccountRepository
 from app.crud.user import UserRepository
-from app.exceptions.exceptions import EmailConflictException
+from app.exceptions.user import EmailConflictException
 from app.models.enums import Provider
 from app.schemas.user.request import CreateUserRequest
 from app.schemas.user.response import CreateUserResponse

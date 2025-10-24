@@ -38,5 +38,4 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
         derived_key = hashlib.pbkdf2_hmac("sha256", plain_password.encode("utf-8"), salt, iterations)
         return hmac.compare_digest(derived_key, expected)
     except Exception:
-        # TODO: return Exception
         return False
