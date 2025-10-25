@@ -5,7 +5,7 @@ from pydantic import AfterValidator, StringConstraints
 
 
 def _validate_password_complexity(value: str) -> str:
-    # TODO:　正規表現での実装ができなかったので、ひとまずCopilot提案のパスワード検証ロジックとするが、後々修正必須。
+    # TODO: 正規表現での実装ができなかったので、ひとまずCopilot提案のパスワード検証ロジックとするが、後々修正必須。
     """Ensure password has lower/upper/digit/symbol and no whitespace."""
     if not any(c.islower() for c in value):
         raise ValueError("password must contain at least one lowercase letter")

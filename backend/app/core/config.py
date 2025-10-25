@@ -3,7 +3,6 @@ from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 env_path = Path(__file__).resolve().parent.parent.parent / ".env"
-print(f"Loading environment variables from: {env_path}")
 
 
 class Settings(BaseSettings):

@@ -20,7 +20,7 @@ def get_auth_service() -> AuthService:
 @router.post(
     "/auth/login",
     response_model=LoginResponse,
-    status_code=HTTPStatus.OK,
+    status_code=HTTPStatus.OK.value,
 )
 async def login(
     request: LoginRequest,
