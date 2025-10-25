@@ -1,5 +1,6 @@
 from uuid import UUID
 
+from pydantic import EmailStr
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -8,12 +9,19 @@ from app.models.enums import Provider
 from app.models.user import UserModel
 
 
-class AccountRepository:
-    async def find_local_by_email(self, session: AsyncSession, email: str) -> AccountModel | None:
+class AccountCRUD:
+    async def find_local_by_email(
+        self,
+        session: AsyncSession,
+        email: EmailStr,
+    ) -> AccountModel | None:
         stmt = (
             select(AccountModel)
             .join(AccountModel.user)
-            .where(UserModel.email == email, AccountModel.provider == Provider.LOCAL)
+            .where(
+                UserModel.email == email,
+                AccountModel.provider == Provider.LOCAL,
+            )
         )
         result = await session.execute(stmt)
         return result.scalars().first()
@@ -39,3 +47,8 @@ class AccountRepository:
         session.add(account)
         await session.flush()
         return account
+
+    async def find_local_by_user_id(self, session: AsyncSession, user_id: UUID) -> AccountModel | None:
+        stmt = select(AccountModel).where(AccountModel.user_id == user_id, AccountModel.provider == Provider.LOCAL)
+        result = await session.execute(stmt)
+        return result.scalars().first()

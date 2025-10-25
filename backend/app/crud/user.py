@@ -5,13 +5,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.user import UserModel
 
 
-class UserRepository:
+class UserCRUD:
     async def find_by_email(
         self,
         session: AsyncSession,
-        email: str,
+        email: EmailStr,
     ) -> UserModel | None:
-        result = await session.execute(select(UserModel).where(UserModel.email == email))
+        stmt = select(UserModel).where(UserModel.email == email)
+        result = await session.execute(stmt)
         return result.scalars().first()
 
     async def create(
@@ -21,6 +22,5 @@ class UserRepository:
     ) -> UserModel:
         user = UserModel(email=email)
         session.add(user)
-        # Ensure PK is available before dependent inserts in the same transaction
         await session.flush()
         return user

@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import database_config
-from app.crud.account import AccountRepository
+from app.crud.account import AccountCRUD
 from app.schemas.auth.request import LoginRequest
 from app.schemas.auth.response import LoginResponse
 from app.services.auth import AuthService
@@ -14,7 +14,7 @@ router = APIRouter(tags=["auth"])
 
 
 def get_auth_service() -> AuthService:
-    return AuthService(account_repository=AccountRepository())
+    return AuthService(account_crud=AccountCRUD())
 
 
 @router.post(
