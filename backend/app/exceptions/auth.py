@@ -3,6 +3,11 @@ from app.exceptions.base import (
 )
 
 
+class InvalidCredentialsException(AppUnauthorizedException):
+    def __init__(self) -> None:
+        super().__init__("Invalid credentials provided")
+
+
 class ExpiredSignatureException(AppUnauthorizedException):
     def __init__(self) -> None:
         super().__init__("The token signature has expired")

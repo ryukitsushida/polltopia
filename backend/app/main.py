@@ -12,6 +12,7 @@ from app.core.seed_data import seed_data
 from app.exceptions.base import (
     AppConflictException,
     AppException,
+    AppUnauthorizedException,
 )
 from app.routers import (
     auth,
@@ -49,6 +50,12 @@ async def health_check() -> dict[str, str]:
 
 @app.exception_handler(AppException)
 async def app_exception_handler(_: Request, exc: AppException) -> JSONResponse:
+    if isinstance(exc, AppUnauthorizedException):
+        return JSONResponse(
+            status_code=HTTPStatus.UNAUTHORIZED,
+            content={"detail": exc.message},
+        )
+
     if isinstance(exc, AppConflictException):
         return JSONResponse(
             status_code=HTTPStatus.CONFLICT,
