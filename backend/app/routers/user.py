@@ -1,13 +1,12 @@
 from http import HTTPStatus
-from typing import Annotated, cast
+from typing import Annotated
 from uuid import UUID
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-from fastapi import APIRouter, Depends, Header, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import database_config
-from app.core.utils.auth import decode_access_token
+from app.core.utils.auth import get_current_user_id
 from app.crud.account import (
     AccountCRUD,
 )
@@ -33,18 +32,6 @@ def get_service() -> UserService:
 
 router = APIRouter(tags=["users"])
 
-security = HTTPBearer()
-
-
-def _get_current_user_id(credentials: HTTPAuthorizationCredentials = Depends(security)) -> str:
-    token = credentials.credentials
-    payload = decode_access_token(token)
-    sub = payload.get("sub")
-    if not sub:
-        raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED.value, detail="Invalid token")
-    _ = UUID(str(sub))
-    return cast(str, sub)
-
 
 @router.get(
     "/users/me",
@@ -54,7 +41,7 @@ def _get_current_user_id(credentials: HTTPAuthorizationCredentials = Depends(sec
 async def get_me(
     service: Annotated[UserService, Depends(get_service)],
     session: Annotated[AsyncSession, Depends(database_config.get_db_session)],
-    user_id: Annotated[str, Depends(_get_current_user_id)],
+    user_id: Annotated[UUID, Depends(get_current_user_id)],
 ) -> MeResponse:
     return await service.get_me(session, user_id)
 

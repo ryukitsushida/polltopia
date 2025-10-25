@@ -1,7 +1,10 @@
 from datetime import UTC, datetime, timedelta
-from typing import Any
+from typing import Annotated, Any
+from uuid import UUID
 
 import jwt
+from fastapi import Depends
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from app.core.config import setting
 from app.exceptions.auth import (
@@ -29,3 +32,15 @@ def decode_access_token(token: str) -> dict[str, Any]:
     except jwt.PyJWTError:
         raise InvalidTokenException() from None
     return payload
+
+
+security = HTTPBearer()
+
+
+def get_current_user_id(credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)]) -> UUID:
+    token = credentials.credentials
+    payload = decode_access_token(token)
+    sub = payload.get("sub")
+    if not sub:
+        raise InvalidTokenException()
+    return UUID(str(sub))
