@@ -1,4 +1,3 @@
-import os
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from http import HTTPStatus
@@ -7,6 +6,7 @@ import uvicorn
 from fastapi import APIRouter, FastAPI, Request
 from fastapi.responses import JSONResponse
 
+from app.core.config import setting
 from app.core.database import database_config
 from app.core.seed_data import seed_data
 from app.exceptions.base import (
@@ -22,10 +22,7 @@ from app.routers import (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
-    if "ENV" not in os.environ:
-        raise ValueError("ENV environment variable is not set.")
-
-    is_dev = os.environ["ENV"] == "dev"
+    is_dev = setting.app_env == "dev"
     if is_dev:
         await database_config.create_tables()
         await seed_data(database_config)
@@ -65,4 +62,4 @@ async def app_exception_handler(_: Request, exc: AppException) -> JSONResponse:
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(app, host="0.0.0.0", port=setting.app_port, reload=True)

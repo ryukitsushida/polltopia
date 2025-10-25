@@ -8,11 +8,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    environment:
-      # 環境変数はローカル開発環境以外ではAWS側で管理する
-      ENV: dev
-      JWT_SECRET_KEY: polltopia_secret_key_dev
-      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/polltopia
+    env_file:
+      - ./backend/.env
     volumes:
       - ./backend:/app
   db:

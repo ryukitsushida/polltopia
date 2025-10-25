@@ -1,6 +1,7 @@
 # Runtime
 fastapi~=0.119.1
 pydantic~=2.12.3
+pydantic-settings~=2.11.0
 email-validator~=2.3.0
 sqlalchemy~=2.0.44
 asyncpg~=0.30.0
