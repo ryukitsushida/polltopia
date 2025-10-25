@@ -55,8 +55,7 @@ async def app_exception_handler(_: Request, exc: AppException) -> JSONResponse:
             status_code=HTTPStatus.UNAUTHORIZED,
             content={"detail": exc.message},
         )
-
-    if isinstance(exc, AppConflictException):
+    elif isinstance(exc, AppConflictException):
         return JSONResponse(
             status_code=HTTPStatus.CONFLICT,
             content={"detail": exc.message},

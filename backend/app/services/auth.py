@@ -1,4 +1,3 @@
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.utils.auth import create_access_token
