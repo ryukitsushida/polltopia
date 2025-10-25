@@ -20,7 +20,6 @@ class UserService:
         self.account_crud = account_crud
 
     async def get_me(self, session: AsyncSession, user_id: UUID) -> MeResponse:
-
         result = await session.get(UserModel, user_id)
         if result is None:
             raise InvalidTokenException()
