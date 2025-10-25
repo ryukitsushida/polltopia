@@ -1,4 +1,4 @@
-from app.db.config import DatabaseConfig
+from app.core.database import DatabaseConfig
 from app.models.sample import SampleModel
 
 

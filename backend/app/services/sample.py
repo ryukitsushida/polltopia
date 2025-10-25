@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.repositories.sample import SampleRepository
+from app.crud.sample import SampleRepository
 from app.schemas.sample.request import (
     CreateSampleRequest,
 )
@@ -19,7 +19,7 @@ class SampleService:
         session: AsyncSession,
     ) -> list[SampleResponse]:
         samples = await self.repo.find_all(session)
-        return [SampleResponse.from_model(sample) for sample in samples]
+        return [SampleResponse.from_sample_model(sample) for sample in samples]
 
     async def create(
         self,
@@ -31,4 +31,4 @@ class SampleService:
             name=request.name,
             description=request.description if request.description else None,
         )
-        return CreateSampleResponse.from_model(sample)
+        return CreateSampleResponse.from_sample_model(sample)

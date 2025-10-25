@@ -11,7 +11,7 @@ class SampleResponse(BaseModel):
     description: Annotated[str | None, Field(default=None, max_length=255)]
 
     @staticmethod
-    def from_model(sample: SampleModel) -> "SampleResponse":
+    def from_sample_model(sample: SampleModel) -> "SampleResponse":
         return SampleResponse(
             id=sample.id,
             name=sample.name,
@@ -25,7 +25,7 @@ class CreateSampleResponse(BaseModel):
     description: Annotated[str | None, Field(default=None, max_length=255)]
 
     @staticmethod
-    def from_model(sample: SampleModel) -> "CreateSampleResponse":
+    def from_sample_model(sample: SampleModel) -> "CreateSampleResponse":
         return CreateSampleResponse(
             id=sample.id,
             name=sample.name,

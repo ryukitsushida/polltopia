@@ -1,19 +1,22 @@
-import os
 from collections.abc import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import DeclarativeBase
 
-Base = declarative_base()
+from app.core.config import setting
+
+
+class Base(DeclarativeBase):
+    pass
 
 
 class DatabaseConfig:
     def __init__(self) -> None:
-        self.database_url = os.getenv("DATABASE_URL", "postgresql+asyncpg://postgres:postgres@db:5432/polltopia")
+        self.database_url = setting.database_url
         self.engine = create_async_engine(self.database_url)
         self.AsyncSessionLocal = async_sessionmaker(bind=self.engine, expire_on_commit=False)
 
-    async def get_db_session(self) -> AsyncGenerator[AsyncSession, None]:
+    async def get_db_session(self) -> AsyncGenerator[AsyncSession]:
         async with self.AsyncSessionLocal() as session:
             yield session
 
