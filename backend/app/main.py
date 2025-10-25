@@ -30,7 +30,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     try:
         yield
     finally:
-        if is_dev:
+        if setting.app_env == "test":
             await database_config.drop_tables()
 
 
